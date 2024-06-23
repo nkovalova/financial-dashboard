@@ -21,7 +21,7 @@ export class TransactionsController {
     }
 
     await this.transactionsService.uploadCSV(file);
-    
+
     return { message: 'File uploaded successfully' };
   }
 
