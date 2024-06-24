@@ -6,6 +6,10 @@
   margin-bottom: 20px;
 }
 
+.nodata {
+  margin-bottom: 2rem;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;

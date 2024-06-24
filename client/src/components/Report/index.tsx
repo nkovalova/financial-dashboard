@@ -5,7 +5,6 @@ import styles from "./Repors.module.css";
 interface Props {
   report: IReport[];
 }
-console.log(styles)
 
 const Report: React.FC<Props> = ({ report }) => {
   const accountsMap = new Map();
@@ -27,7 +26,7 @@ const Report: React.FC<Props> = ({ report }) => {
   return (
     <>
       <h2>PL Accounts Report</h2>
-      <div className={styles.container}>
+      {!report.length ? <div className={styles.nodata}>No data to display</div> : <div className={styles.container}>
         <table className={styles.table}>
           <thead>
             <tr>
@@ -48,7 +47,7 @@ const Report: React.FC<Props> = ({ report }) => {
             ))}
           </tbody>
         </table>
-      </div>
+      </div>}
     </>
   );
 };
