@@ -25,6 +25,12 @@ export class TransactionsController {
     return { message: 'File uploaded successfully' };
   }
 
+  @Get('report')
+  async getReport() {
+    const report = await this.transactionsService.getReport();
+    return report;
+  }
+
   @Get('top5placcounts/:lastMonth')
   async getTop5PLAccounts(@Param('lastMonth') lastMonth: string) {
     const top5PLAccounts =

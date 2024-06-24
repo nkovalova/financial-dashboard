@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import transactionsModel from '../../models/transactions';
-import { IAccount } from '../../types/account.types';
+import { IAccount, IReport } from '../../types/report.types';
 
-const useTopPLAccounts = (lastMonth: string, refreshData: boolean): IAccount[] => {
+const useTopPLAccounts = (lastMonth: string, refreshData: boolean): {
+  top5PLAccounts: IAccount[],
+  report: IReport[],
+} => {
   const [top5PLAccounts, setTop5PLAccounts] = useState<IAccount[]>([]);
+  const [report, setReport] = useState<IAccount[]>([]);
 
   useEffect(() => {
     const fetchTop5PLAccounts = async () => {
@@ -15,10 +19,20 @@ const useTopPLAccounts = (lastMonth: string, refreshData: boolean): IAccount[] =
       }
     };
 
+    const fetchReport = async () => {
+      try {
+        const res = await transactionsModel.fetchReport();
+        setReport(res);
+      } catch (error) {
+        console.log('report error', error);
+      }
+    };
+
     fetchTop5PLAccounts();
+    fetchReport();
   }, [lastMonth, refreshData]);
 
-  return top5PLAccounts;
+  return { top5PLAccounts, report };
 };
 
 export default useTopPLAccounts;

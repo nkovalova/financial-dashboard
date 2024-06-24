@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useRef, useState } from "react";
-import useUploadFile from "./hooks/useFileUpload";
-import styles from "../styles/FileUpload.module.css";
+import useUploadFile from "./useFileUpload";
+import styles from "./FileUpload.module.css";
 
 interface FileUploadProps {
   onUploadSuccess: () => void;
@@ -28,7 +28,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
     file && uploadFile(file).then(() => setFile(null));
 
   return (
-    <div className={styles.fileUpload}>
+    <div className={styles.container}>
       <input
         type="file"
         ref={fileInputRef}

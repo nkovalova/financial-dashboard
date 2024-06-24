@@ -1,6 +1,6 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
-import { IAccount } from "../types/account.types";
+import { IAccount } from "../../types/report.types";
 
 const TopPLAccounts: React.FC<{ topPLAccounts: IAccount[] }> = ({
   topPLAccounts,

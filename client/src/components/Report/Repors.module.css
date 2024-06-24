@@ -1,0 +1,45 @@
+.container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 400px;
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  background-color: #485447;
+  z-index: 1;
+}
+
+.table th:first-child {
+  left: 0;
+  z-index: 2;
+}
+
+.table td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #474d54;
+  z-index: 1;
+}
+
+.bestpractice {
+  background-color: #795432;
+
+  td:first-child {
+    background-color: #795432;
+  }  
+}

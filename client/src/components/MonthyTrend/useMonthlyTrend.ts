@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import transactionsModel from '../../models/transactions';
-import { IAccount } from '../../types/account.types';
-import { MonthTrend } from '../../types/report.types';
+import { IAccount, MonthTrend } from '../../types/report.types';
 
 const useMonthlyTrend = (selectedAccountId?: IAccount['pl_account_id']) => {
   const [monthlyTrend, setMonthlyTrend] = useState<MonthTrend[]>([]);

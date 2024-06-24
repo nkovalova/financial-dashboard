@@ -1,5 +1,4 @@
-import { IAccount } from "../types/account.types";
-import { MonthTrend } from "../types/report.types";
+import { IAccount, MonthTrend } from "../types/report.types";
 import axiosClient from "../utils/axiosClient";
 
 class TransactionsModel {
@@ -10,6 +9,12 @@ class TransactionsModel {
       },
     });
   }
+
+  async fetchReport(): Promise<IAccount[]> {
+    const response = await axiosClient.get(`transactions/report`);
+    return response.data;
+  }
+
 
   async fetchTop5PLAccounts(lastMonth: string): Promise<IAccount[]> {
     const response = await axiosClient.get(

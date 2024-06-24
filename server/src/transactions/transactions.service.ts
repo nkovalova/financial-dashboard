@@ -45,7 +45,7 @@ export class TransactionsService {
 
       const accountMap = await this.getAccounts(Array.from(accountNames));
 
-      // Оновлення транзакцій з айдішниками акаунтів
+      // Update transactions with account IDs
       transactions.forEach((transaction: any) => {
         transaction.plAccount = {
           id: accountMap.get(transaction.account),
@@ -53,7 +53,7 @@ export class TransactionsService {
         delete transaction.account;
       });
 
-      // Збереження транзакцій в базу даних
+      // Saving transactions to the database
       const res = await this.transactionsRepository.save(transactions);
       console.log('res', res);
       return true;
@@ -65,9 +65,9 @@ export class TransactionsService {
   deleteFile(filePath) {
     fs.unlink(filePath, (err) => {
       if (err) {
-        console.error(`Помилка при видаленні файлу: ${filePath}`, err);
+        console.error(`Error when deleting a file: ${filePath}`, err);
       } else {
-        console.log(`Файл успішно видалено: ${filePath}`);
+        console.log(`File successfully deleted: ${filePath}`);
       }
     });
   }
@@ -83,7 +83,7 @@ export class TransactionsService {
       existingAccounts.map((account) => account.name),
     );
 
-    // Створення нових акаунтів для тих імен, яких немає в базі даних
+    // Create new accounts for names that are not in the database
     const newAccountNames = [...accountNames].filter(
       (name) => !existingAccountNames.has(name),
     );
@@ -97,7 +97,7 @@ export class TransactionsService {
     );
     await this.plAccountsRepository.save(newAccounts);
 
-    // Об'єднання існуючих і нових акаунтів
+    // Merging existing and new accounts
     const allAccounts = [...existingAccounts, ...newAccounts];
     const accountMap = new Map(
       allAccounts.map((account) => [account.name, account.id]),
@@ -106,7 +106,13 @@ export class TransactionsService {
     return accountMap;
   }
 
-  async getTop5PLAccounts(lastMonth: string): Promise<any> {
+  async getTop5PLAccounts(lastMonth: string): Promise<
+    {
+      pl_account_id: number;
+      name: string;
+      total_amount: number;
+    }[]
+  > {
     const startDate = new Date(`${lastMonth}-01`);
     const endDate = new Date(startDate);
     endDate.setMonth(startDate.getMonth() + 1);
@@ -130,7 +136,35 @@ export class TransactionsService {
     return topAccounts;
   }
 
-  async getMonthlyTrend(plAccountId: number): Promise<any> {
+  async getReport(): Promise<
+    {
+      account_name: string;
+      month: string;
+      total_amount: number;
+      is_best_practice_account: boolean;
+    }[]
+  > {
+    return this.transactionsRepository
+      .createQueryBuilder('transaction')
+      .select([
+        'plAccount.name AS account_name',
+        "TO_CHAR(transaction.date, 'YYYY-MM') AS month",
+        'SUM(transaction.amount) AS total_amount',
+        'CASE WHEN plAccount.bestPracticeAccount IS NOT NULL THEN TRUE ELSE FALSE END AS is_best_practice_account',
+      ])
+      .leftJoin('transaction.plAccount', 'plAccount')
+      .leftJoin('plAccount.bestPracticeAccount', 'bestPracticeAccount')
+      .groupBy('plAccount.name, month, plAccount.bestPracticeAccount')
+      .orderBy('plAccount.name, month')
+      .getRawMany();
+  }
+
+  async getMonthlyTrend(plAccountId: number): Promise<
+    {
+      date: string;
+      amount: number;
+    }[]
+  > {
     return this.transactionsRepository
       .createQueryBuilder('transaction')
       .select([

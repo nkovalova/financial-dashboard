@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { IAccount } from "../types/account.types";
-import { MonthTrend } from "../types/report.types";
-import useMonthlyTrend from "./hooks/useMonthlyTrend";
+import { MonthTrend, IAccount } from "../../types/report.types";
+import useMonthlyTrend from "./useMonthlyTrend";
 
 interface Props {
   topPLAccounts: IAccount[];
